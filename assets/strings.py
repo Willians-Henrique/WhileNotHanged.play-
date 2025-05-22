@@ -1,0 +1,26 @@
+# Dicionário de textos
+textos = {
+    "titulo": "WhileNotHanged.play()",
+    "subtitulo": "Aprenda Python de forma divertida!",
+    "digite_nome": "Digite seu nome:",
+    "comecar": "COMEÇAR!",
+    "idade": "Para jogadores de 10 a 14 anos",
+    "jogador": "Jogador: {}",
+    "vidas": "Vidas: {}",
+    "pontos": "Pontos: {}",
+    "tempo": "Tempo: {:02d}:{:02d}",
+    "correto": "Correto!",
+    "errado": "Errado!",        
+    "dica": "Dica: {}",
+    "fim_jogo": "Fim de Jogo!",
+    "pontuacao": "Pontuação final: {}",
+    "acertos": "Você acertou {} de {} perguntas",
+    "mensagem_vitoria": "Parabéns, você é um mestre Python!",
+    "mensagem_derrota": "Continue estudando, você vai melhorar!",
+    "jogar_novamente": "Jogar Novamente",
+    "sair_jogo": "Sair do Jogo",
+    "creditos": "Créditos",
+    "voltar": "Voltar",
+    "cuidado": "CUIDADO! Você está errando muito!",
+    "selecione_letra": "Selecione uma letra:"
+}
