@@ -3,7 +3,7 @@ textos = {
     "titulo": "WhileNotHanged.play()",
     "subtitulo": "Aprenda Python de forma divertida!",
     "digite_nome": "Digite seu nome:",
-    "comecar": "COMEÇAR!",
+    "comecar": "Jogar",
     "idade": "Para jogadores de 10 a 14 anos",
     "jogador": "Jogador: {}",
     "vidas": "Vidas: {}",
