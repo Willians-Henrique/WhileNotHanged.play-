@@ -10,8 +10,14 @@ def iniciar_jogo():
     clock = pygame.time.Clock()
     fontes = get_fonts()
 
+    img_trofeu = pygame.image.load("assets/img/trofeu.png").convert_alpha()
+    img_sair = pygame.image.load("assets/img/sair.png").convert_alpha()
+    img_idade = pygame.image.load("assets/img/idade.png").convert_alpha()
+    img_python = pygame.image.load("assets/img/python.png").convert_alpha()
+
+
     input_ativo = False
-    caixa_texto = pygame.Rect(LARGURA//2 - 200, ALTURA//2 + 50, 400, 60)
+    caixa_texto = pygame.Rect(LARGURA // 2 - 260, ALTURA // 2 - 50, 546, 68)
     jogador = criar_jogador()
 
     running = True
