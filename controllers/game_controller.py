@@ -25,7 +25,8 @@ def iniciar_jogo():
           # Desenha a tela e pega os retângulos dos botões
         botao_inicio_rect, botao_creditos_rect, botao_sair_rect = desenhar_tela_inicio(
             screen, fontes, textos, CORES,
-            input_ativo, caixa_texto, jogador.nome
+            input_ativo, caixa_texto, jogador.nome, img_trofeu,img_sair,
+            img_idade, img_python
         )
 
         for event in pygame.event.get():
@@ -47,7 +48,7 @@ def iniciar_jogo():
                     # Aqui você pode mostrar os créditos
                 if botao_sair_rect.collidepoint(event.pos):
                     print("Clicou no botão SAIR")
-                   running = False
+                    running = False
 
             if event.type == pygame.KEYDOWN and input_ativo:
                 if event.key == pygame.K_RETURN:
