@@ -16,6 +16,12 @@ def iniciar_jogo():
 
     running = True
     while running:
+          # Desenha a tela e pega os retângulos dos botões
+        botao_inicio_rect, botao_creditos_rect, botao_sair_rect = desenhar_tela_inicio(
+            screen, fontes, textos, CORES,
+            input_ativo, caixa_texto, jogador.nome
+        )
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -26,6 +32,17 @@ def iniciar_jogo():
                 else:
                     input_ativo = False
 
+                     # Verifica clique nos botões
+                if botao_inicio_rect.collidepoint(event.pos):
+                    print("Clicou no botão COMEÇAR")
+                    # Aqui você pode avançar para o jogo
+                if botao_creditos_rect.collidepoint(event.pos):
+                    print("Clicou no botão CRÉDITOS")
+                    # Aqui você pode mostrar os créditos
+                if botao_sair_rect.collidepoint(event.pos):
+                    print("Clicou no botão SAIR")
+                   running = False
+
             if event.type == pygame.KEYDOWN and input_ativo:
                 if event.key == pygame.K_RETURN:
                     jogador.nome = jogador.nome.strip()
@@ -35,11 +52,6 @@ def iniciar_jogo():
                 else:
                     atualizar_nome(jogador, event)
                     print(f"Nome do jogador: {jogador.nome}")
-
-        desenhar_tela_inicio(
-            screen, fontes, textos, CORES,
-            input_ativo, caixa_texto, jogador.nome
-        )
 
         pygame.display.flip()
         clock.tick(60)

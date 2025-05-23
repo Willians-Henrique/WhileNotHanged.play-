@@ -17,3 +17,10 @@ def desenhar_tela_resultado(tela, fontes, textos, cores, ui, player, game):
 #Desenha a tela de créditos.
 def desenhar_tela_creditos(tela, fontes, textos, cores, ui):
     pass
+
+def checar_clique_botao(event, botao_rect):
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if botao_rect.collidepoint(event.pos):
+            print('Botão clicado!')
+            return True
+    return False
