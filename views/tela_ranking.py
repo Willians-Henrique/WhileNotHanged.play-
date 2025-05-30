@@ -2,15 +2,12 @@ import pygame
 
 def desenhar_tela_ranking(tela, fontes, textos, cores, img_voltar):
     # Desempacota as fontes e cores
-    fonte_pequena = fontes["pequena"]
-    fonte_media = fontes["media"]
     fonte_grande = fontes["grande"]
     fonte_titulo = fontes["titulo"]
 
-    AMARELO = cores["AMARELO"]
-    AMARELO_HOVER = cores["AMARELO_HOVER"]
+
     PRETO = cores["PRETO"]
-    AZUL = cores["AZUL_CLARO"]
+    AZUL = cores["AZUL"]
 
     LARGURA, ALTURA = tela.get_size()
 

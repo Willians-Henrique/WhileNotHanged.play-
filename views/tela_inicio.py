@@ -6,7 +6,6 @@ def desenhar_tela_inicio(
     img_sair, img_idade, img_python
 ):
     #Desempacota as fontes e cores
-    fonte_pequena = fontes["pequena"]
     fonte_media = fontes["media"]
     fonte_grande = fontes["grande"]
     fonte_titulo = fontes["titulo"]
@@ -14,15 +13,12 @@ def desenhar_tela_inicio(
     AMARELO = cores["AMARELO"]
     AMARELO_HOVER = cores["AMARELO_HOVER"]
     PRETO = cores["PRETO"]
-    AZUL = cores["AZUL_CLARO"]
+    AZUL = cores["AZUL"]
 
     LARGURA, ALTURA = tela.get_size()
 
     #Fundo azul
     tela.fill(AZUL)
-    s = pygame.Surface((LARGURA, ALTURA), pygame.SRCALPHA)
-    pygame.draw.rect(s, (173, 216, 230, 150), (0, 0, LARGURA, ALTURA))
-    tela.blit(s, (0, 0))
 
     #Título 
     titulo = fonte_titulo.render(textos["titulo"], True, PRETO)

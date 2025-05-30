@@ -1,3 +1,5 @@
+import pygame
+
 #Processa todos os eventos do pygame e delega ações para os outros controllers.
 def processar_eventos(eventos, estado_jogo, ui, game, player, question):
     pass
