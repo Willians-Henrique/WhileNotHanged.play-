@@ -14,7 +14,7 @@ def desenhar_tela_inicio(
     AMARELO = cores["AMARELO"]
     AMARELO_HOVER = cores["AMARELO_HOVER"]
     PRETO = cores["PRETO"]
-    AZUL = cores["AZUL"]
+    AZUL = cores["AZUL_CLARO"]
 
     LARGURA, ALTURA = tela.get_size()
 
@@ -93,16 +93,6 @@ def desenhar_tela_inicio(
     img_idade_rect.x = 70
     img_idade_rect.y = tela.get_height() - 113
     tela.blit(img_idade, img_idade_rect.topleft)
-
-    #Mudando o ponteiro do mouse
-    mouse_pos = pygame.mouse.get_pos()
-
-    if botao_creditos_rect.collidepoint(mouse_pos) or botao_sair_rect.collidepoint(mouse_pos) or botao_inicio_rect.collidepoint(mouse_pos):
-        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-    elif caixa_texto.collidepoint(mouse_pos):
-        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_IBEAM)
-    else:
-        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
     # Retorne os retângulos dos botões para detecção de clique
     return botao_inicio_rect, botao_creditos_rect, botao_sair_rect

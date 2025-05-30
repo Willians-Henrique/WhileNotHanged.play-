@@ -19,7 +19,8 @@ textos = {
     "mensagem_derrota": "Continue estudando, você vai melhorar!",
     "jogar_novamente": "Jogar Novamente",
     "sair_jogo": "Sair do Jogo",
-    "creditos": "Créditos",
+    "creditos": "Ranking",
+    "posicao": "Você está na {} posição com {} pontos",
     "voltar": "Voltar",
     "cuidado": "CUIDADO! Você está errando muito!",
     "selecione_letra": "Selecione uma letra:"
