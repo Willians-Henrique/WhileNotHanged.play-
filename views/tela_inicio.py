@@ -1,4 +1,6 @@
 import pygame
+from views.componentes import desenhar_botao
+
 
 def desenhar_tela_inicio(
     tela, fontes, textos, cores, 
@@ -55,7 +57,6 @@ def desenhar_tela_inicio(
 
     texto_input = fonte_media.render(nome_jogador, True, PRETO)
     tela.blit(texto_input, (caixa_texto.x + 20, caixa_texto.y + 15))
-
     #Botão jogar
     texto_botao = fonte_grande.render(textos["comecar"], True, PRETO)
     largura_botao = max(288, texto_botao.get_width() + 60)
@@ -65,14 +66,15 @@ def desenhar_tela_inicio(
     mouse_pos = pygame.mouse.get_pos() #hover
     cor_botao = AMARELO_HOVER if botao_inicio_rect.collidepoint(mouse_pos) else AMARELO
 
-    pygame.draw.rect(tela, cor_botao, botao_inicio_rect, 0, border_radius=20)
-    pygame.draw.rect(tela, PRETO, botao_inicio_rect, 3, border_radius=20)
-    tela.blit(
+    desenhar_botao(
+        tela,
+        botao_inicio_rect,
+        cor_botao,
+        PRETO,
         texto_botao,
-        (
-            botao_inicio_rect.x + largura_botao//2 - texto_botao.get_width()//2,
-            botao_inicio_rect.y + 35 - texto_botao.get_height()//2
-        )
+        fonte_grande,
+        PRETO,
+        border_radius=20
     )
 
 
