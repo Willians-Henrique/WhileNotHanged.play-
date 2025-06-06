@@ -1,11 +1,11 @@
 import string
 import pygame
+from views.componentes import desenhar_forca
+
 
 def desenhar_tela_jogo(
     tela, fontes, textos, cores,
-    nome_jogador, vidas, pontuacao, tempo_restante,
-    pergunta_atual, perguntas, letras_adivinhadas, letras_disponiveis,
-    erros_consecutivos, feedback,
+    forca_game,
     img_jogador, img_pontos, img_relogio, img_vidas, img_voltar
 ):
     # Fontes e cores
@@ -25,30 +25,18 @@ def desenhar_tela_jogo(
     LARGURA, ALTURA = tela.get_size()
     tela.fill(AZUL)
 
-    # --- Desenha a forca no lado esquerdo ---
-    base_largura = 200
-    base_altura = 20
-    poste_altura = 400
-    braco_largura = 150
-    corda_altura = 50
-    corda_largura = 20
+    # --- Dados do jogo via model ---
+    nome_jogador = forca_game.jogador.nome if forca_game.jogador else ""
+    vidas = forca_game.jogador.vidas if forca_game.jogador else 0
+    pontuacao = forca_game.jogador.pontuacao if forca_game.jogador else 0
+    tempo_restante = forca_game.tempo_restante
+    pergunta = forca_game.get_pergunta_atual()
+    resposta = forca_game.get_resposta_atual()
+    dica = forca_game.get_dica_atual()
+    letras_adivinhadas = forca_game.jogador.letras_adivinhadas if forca_game.jogador else []
+    erros_consecutivos = forca_game.jogador.erros_consecutivos if forca_game.jogador else 0
 
-    base_x = 100
-    base_y = ALTURA // 2 + 220
-
-    pygame.draw.rect(tela, PRETO, (base_x, base_y, base_largura, base_altura))
-    poste_x = base_x + base_largura // 2 - 10
-    poste_y = base_y - poste_altura
-    poste_largura = 20
-    pygame.draw.rect(tela, PRETO, (poste_x, poste_y, poste_largura, poste_altura))
-    braco_x = poste_x + poste_largura
-    braco_y = poste_y
-    braco_altura = 20
-    pygame.draw.rect(tela, PRETO, (braco_x, braco_y, braco_largura, braco_altura))
-    corda_x = braco_x + braco_largura
-    corda_y_inicial = braco_y
-    pygame.draw.rect(tela, PRETO, (corda_x, corda_y_inicial, corda_largura, corda_altura))
-
+  
     # Voltar canto superior esquerdo
     img_voltar_rect = img_voltar.get_rect(topleft=(50, 30))
     tela.blit(img_voltar, img_voltar_rect)
@@ -88,8 +76,7 @@ def desenhar_tela_jogo(
     tela.blit(nome_texto, (img_jogador_rect.left - 10 - nome_texto.get_width(), y_superior + img_jogador_rect.height//2 - nome_texto.get_height()//2))
 
     # Pergunta
-    pergunta = perguntas[pergunta_atual]
-    texto_pergunta = pergunta["pergunta"]
+    texto_pergunta = pergunta.pergunta if pergunta else ""
 
     largura_ret = 723
     altura_ret = 150
@@ -128,8 +115,8 @@ def desenhar_tela_jogo(
             tela.blit(texto_render, (x_texto, y_texto))
 
     # Palavra da forca
-    palavra = pergunta["resposta"].upper()
-    letras_descobertas = [l for l in letras_adivinhadas]  # lógica do seu jogo
+    palavra = resposta
+    letras_descobertas = [l for l in letras_adivinhadas]
 
     num_letras = len(palavra)
     espaco_letra = 50
@@ -171,16 +158,20 @@ def desenhar_tela_jogo(
         y_letra = y + (altura_botao - letra_render.get_height()) // 2
         tela.blit(letra_render, (x_letra, y_letra))
 
+    # Desenha a forca e o boneco conforme os erros
+    erros = forca_game.jogador.erros_consecutivos if forca_game.jogador else 0
+    desenhar_forca(tela, erros, cores=cores)
+
     # Mensagem de cuidado
     if erros_consecutivos >= 2:
         cuidado_texto = fonte_grande.render(textos["cuidado"], True, VERMELHO)
         tela.blit(cuidado_texto, (x_ret, y_tracos + 120))
 
     # Dica se vidas <= 1
-    if vidas <= 1:
+    if vidas <= 1 and dica:
         pygame.draw.rect(tela, AMARELO, (x_ret, y_tracos + 70, 800, 80), 0, border_radius=15)
         pygame.draw.rect(tela, PRETO, (x_ret, y_tracos + 70, 800, 80), 3, border_radius=15)
-        texto_dica = fonte_pequena.render(textos["dica"].format(pergunta['dica']), True, PRETO)
+        texto_dica = fonte_pequena.render(textos["dica"].format(dica), True, PRETO)
         tela.blit(texto_dica, (x_ret + 20, y_tracos + 100))
 
     return img_voltar_rect

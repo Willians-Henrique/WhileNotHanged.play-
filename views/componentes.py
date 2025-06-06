@@ -9,31 +9,41 @@ def desenhar_botao(tela, rect, cor_fundo, cor_borda, texto, fonte, cor_texto, bo
     )
 
 def desenhar_forca(tela, erros, cores, forca_x=100, forca_y=150):
+    PRETO = cores["PRETO"]
+    PELE = cores["pele"]
+    
+    # Estrutura da forca preta (usando os tamanhos e posições que você pediu)
+    base_largura = 200
+    base_altura = 20
+    poste_altura = 400
+    braco_largura = 150
+    corda_altura = 50
+    corda_largura = 20
+
+    base_x = forca_x
+    base_y = forca_y + 370  # ALTURA // 2 + 220, mas relativo ao forca_y
+
+    pygame.draw.rect(tela, PRETO, (base_x, base_y, base_largura, base_altura))
+    poste_x = base_x + base_largura // 2 - 10
+    poste_y = base_y - poste_altura
+    poste_largura = 20
+    pygame.draw.rect(tela, PRETO, (poste_x, poste_y, poste_largura, poste_altura))
+    braco_x = poste_x + poste_largura
+    braco_y = poste_y
+    braco_altura = 20
+    pygame.draw.rect(tela, PRETO, (braco_x, braco_y, braco_largura, braco_altura))
+    corda_x = braco_x + braco_largura
+    corda_y_inicial = braco_y
+    pygame.draw.rect(tela, PRETO, (corda_x, corda_y_inicial, corda_largura, corda_altura))
+
+    # Boneco (apenas se houver erros)
     partes = [
-        lambda: pygame.draw.rect(tela, cores["marrom"], (forca_x-20, forca_y+300, 300, 30)),
-        lambda: pygame.draw.rect(tela, cores["marrom"], (forca_x+120, forca_y+50, 20, 250)),
-        lambda: pygame.draw.rect(tela, cores["marrom"], (forca_x+120, forca_y+50, 150, 20)),
-        lambda: pygame.draw.rect(tela, cores["marrom"], (forca_x+260, forca_y+50, 10, 50)),
-        lambda: [
-            pygame.draw.circle(tela, cores["pele"], (forca_x+265, forca_y+125), 25),
-            pygame.draw.circle(tela, cores["preto"], (forca_x+255, forca_y+120), 3),
-            pygame.draw.circle(tela, cores["preto"], (forca_x+275, forca_y+120), 3),
-            pygame.draw.line(tela, cores["preto"], (forca_x+255, forca_y+140), (forca_x+275, forca_y+140), 2)
-        ],
-        lambda: pygame.draw.line(tela, cores["pele"], (forca_x+265, forca_y+150), (forca_x+265, forca_y+250), 5),
-        lambda: pygame.draw.line(tela, cores["pele"], (forca_x+265, forca_y+170), (forca_x+230, forca_y+200), 5),
-        lambda: pygame.draw.line(tela, cores["pele"], (forca_x+265, forca_y+170), (forca_x+300, forca_y+200), 5),
-        lambda: pygame.draw.line(tela, cores["pele"], (forca_x+265, forca_y+250), (forca_x+240, forca_y+300), 5),
-        lambda: pygame.draw.line(tela, cores["pele"], (forca_x+265, forca_y+250), (forca_x+290, forca_y+300), 5)
+        lambda: pygame.draw.circle(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 25), 25),  # cabeça
+        lambda: pygame.draw.line(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 50), (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 150), 5),  # tronco
+        lambda: pygame.draw.line(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 70), (corda_x + corda_largura // 2 - 35, corda_y_inicial + corda_altura + 100), 5),  # braço esq
+        lambda: pygame.draw.line(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 70), (corda_x + corda_largura // 2 + 35, corda_y_inicial + corda_altura + 100), 5),  # braço dir
+        lambda: pygame.draw.line(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 150), (corda_x + corda_largura // 2 - 25, corda_y_inicial + corda_altura + 200), 5),  # perna esq
+        lambda: pygame.draw.line(tela, PELE, (corda_x + corda_largura // 2, corda_y_inicial + corda_altura + 150), (corda_x + corda_largura // 2 + 25, corda_y_inicial + corda_altura + 200), 5),  # perna dir
     ]
-    # Desenha a estrutura da forca
-    for i in range(4):
+    for i in range(min(erros, len(partes))):
         partes[i]()
-    # Desenha o boneco conforme os erros
-    for i in range(4, 4 + min(erros, 6)):
-        parte = partes[i]
-        resultado = parte()
-        if isinstance(resultado, list):
-            for elemento in resultado:
-                if callable(elemento):
-                    elemento()

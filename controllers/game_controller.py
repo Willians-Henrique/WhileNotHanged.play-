@@ -6,6 +6,7 @@ from views.tela_inicio import desenhar_tela_inicio
 from views.tela_ranking import desenhar_tela_ranking
 from controllers.player_controller import criar_jogador, atualizar_nome
 from views.tela_jogo import desenhar_tela_jogo
+from models.forca_game import ForcaGame
 
 def iniciar_jogo():
     pygame.init()
@@ -28,19 +29,14 @@ def iniciar_jogo():
     caixa_texto = pygame.Rect(LARGURA // 2 - 260, ALTURA // 2 - 50, 546, 68)
     jogador = criar_jogador()
 
+    forca_game = ForcaGame(perguntas)
+
     estado = "inicio"
     running = True
 
-    # Variáveis do jogo
-    tempo_restante = 120
-    pergunta_atual = 0
-    letras_adivinhadas = []
-    letras_disponiveis = [chr(i) for i in range(65, 91)]
-    erros_consecutivos = 0
-    feedback = ""
-
     botao_inicio_rect = botao_creditos_rect = botao_sair_rect = None
     botao_voltar_rect = img_voltar_rect = None
+    ultimo_tick = pygame.time.get_ticks()
 
     while running:
         for event in pygame.event.get():
@@ -52,6 +48,7 @@ def iniciar_jogo():
                     if event.key == pygame.K_RETURN:
                         jogador.nome = jogador.nome.strip()
                         if jogador.nome:
+                            forca_game.iniciar(jogador.nome)
                             print(f"Nome do jogador: {jogador.nome}")
                     else:
                         atualizar_nome(jogador, event)
@@ -66,6 +63,7 @@ def iniciar_jogo():
                     if botao_inicio_rect and botao_inicio_rect.collidepoint(event.pos):
                         print("Clicou no botão COMEÇAR")
                         if jogador.nome.strip():
+                            forca_game.iniciar(jogador.nome)
                             estado = "jogo"
                     elif botao_creditos_rect and botao_creditos_rect.collidepoint(event.pos):
                         print("Clicou no botão RANKING")
@@ -80,10 +78,48 @@ def iniciar_jogo():
                         estado = "inicio"
 
             elif estado == "jogo":
+                agora = pygame.time.get_ticks()
+                if agora - ultimo_tick >= 1000:
+                    ultimo_tick = agora
+                    forca_game.atualizar_tempo()
+                    # Aqui você pode checar se o tempo acabou e agir conforme sua lógica
+
+                # --- DETECTA CLIQUE NAS LETRAS ---
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if img_voltar_rect and img_voltar_rect.collidepoint(event.pos):
-                        estado = "inicio"
-                # Aqui você pode adicionar lógica para clicar nas letras, etc.
+                    mouse_x, mouse_y = event.pos
+                    # Repita a lógica de posição dos botões das letras
+                    alfabeto = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                    letras_por_linha = 10
+                    espacamento = 50
+                    largura_botao = 40
+                    altura_botao = 40
+                    x_alfabeto_inicial = LARGURA - 720
+                    margem_top = 210 + 150 + 40 + 60  # y_ret + altura_ret + 40 + 60
+
+                    for i, letra in enumerate(alfabeto):
+                        linha = i // letras_por_linha
+                        coluna = i % letras_por_linha
+                        x = x_alfabeto_inicial + coluna * espacamento
+                        y = margem_top + linha * (altura_botao + 15)
+                        rect = pygame.Rect(x, y, largura_botao, altura_botao)
+                        if rect.collidepoint(mouse_x, mouse_y):
+                            # Só processa se a letra ainda não foi tentada
+                            if letra not in forca_game.jogador.letras_adivinhadas:
+                                acertou = forca_game.verificar_letra(letra)
+                                # Se errou, o model já atualiza vidas e erros
+                                # Se acertou, só adiciona a letra
+                            break
+
+                img_voltar_rect = desenhar_tela_jogo(
+                    screen, fontes, textos, CORES,
+                    forca_game,
+                    img_jogador, img_pontos, img_relogio, img_vidas, img_voltar
+                )
+                mouse_pos = pygame.mouse.get_pos()
+                if img_voltar_rect and img_voltar_rect.collidepoint(mouse_pos):
+                    pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                else:
+                    pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         # --- DESENHO DAS TELAS ---
         if estado == "inicio":
@@ -111,11 +147,15 @@ def iniciar_jogo():
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         elif estado == "jogo":
+            agora = pygame.time.get_ticks()
+            if agora - ultimo_tick >= 1000:
+                ultimo_tick = agora
+                forca_game.atualizar_tempo()
+                # Aqui você pode checar se o tempo acabou e agir conforme sua lógica
+
             img_voltar_rect = desenhar_tela_jogo(
                 screen, fontes, textos, CORES,
-                jogador.nome, jogador.vidas, jogador.pontuacao, tempo_restante,
-                pergunta_atual, perguntas, letras_adivinhadas, letras_disponiveis,
-                erros_consecutivos, feedback,
+                forca_game,
                 img_jogador, img_pontos, img_relogio, img_vidas, img_voltar
             )
             mouse_pos = pygame.mouse.get_pos()

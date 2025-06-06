@@ -17,7 +17,10 @@ CORES = {
     "LARANJA": (255, 150, 0),
     "ROSA": (255, 100, 180),
     "AZUL_CLARO": (173, 216, 230),
-    "CINZA": (200, 200, 200)
+    "CINZA": (200, 200, 200),
+    "marrom": (139, 69, 19),
+    "pele": (255, 224, 189),  
+    "preto": (0, 0, 0), 
 }
 
 IrishGrover = os.path.join("fonts", "IrishGrover-Regular.ttf")
