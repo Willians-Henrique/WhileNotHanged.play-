@@ -159,7 +159,7 @@ def desenhar_tela_jogo(
         tela.blit(letra_render, (x_letra, y_letra))
 
     # Desenha a forca e o boneco conforme os erros
-    erros = forca_game.jogador.erros_consecutivos if forca_game.jogador else 0
+    erros = forca_game.erros_rodada
     desenhar_forca(tela, erros, cores=cores)
 
     # Mensagem de cuidado
