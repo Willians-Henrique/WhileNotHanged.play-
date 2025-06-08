@@ -1,7 +1,7 @@
 class Jogador:
     def __init__(self, nome):
         self.nome = nome
-        self.vidas = 6
+        self.vidas = 3
         self.pontuacao = 0
         self.acertos_seguidos = 0
         self.erros_consecutivos = 0
