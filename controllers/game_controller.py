@@ -87,7 +87,7 @@ def iniciar_jogo():
                     if forca_game.jogador.vidas > 0:
                         forca_game.atualizar_tempo()
                     else:
-                        estado = "derrota"
+                        estado = "resultado"
                         continue
 
                 img_voltar_rect = desenhar_tela_jogo(
@@ -200,15 +200,6 @@ def iniciar_jogo():
 
 
         elif estado == "jogo":
-            agora = pygame.time.get_ticks()
-            if agora - ultimo_tick >= 1000:
-                ultimo_tick = agora
-                if forca_game.jogador.vidas > 0:
-                    forca_game.atualizar_tempo()
-                else:
-                    estado = "derrota"
-                    continue
-
             img_voltar_rect = desenhar_tela_jogo(
                 screen, fontes, textos, CORES,
                 forca_game,
