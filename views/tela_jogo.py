@@ -163,9 +163,11 @@ def desenhar_tela_jogo(
     desenhar_forca(tela, erros, cores=cores)
 
     # Mensagem de cuidado
-    if erros_consecutivos >= 2:
-        cuidado_texto = fonte_grande.render(textos["cuidado"], True, VERMELHO)
-        tela.blit(cuidado_texto, (x_ret, y_tracos + 120))
+    if dica:
+        pygame.draw.rect(tela, AMARELO, (x_ret, y_tracos + 70, 800, 80), 0, border_radius=15)
+        pygame.draw.rect(tela, PRETO, (x_ret, y_tracos + 70, 800, 80), 3, border_radius=15)
+        texto_dica = fonte_pequena.render(textos["dica"].format(dica), True, PRETO)
+        tela.blit(texto_dica, (x_ret + 20, y_tracos + 100))
 
     # Dica se vidas <= 1
     if vidas <= 1 and dica:

@@ -82,7 +82,23 @@ def iniciar_jogo():
                 if agora - ultimo_tick >= 1000:
                     ultimo_tick = agora
                     forca_game.atualizar_tempo()
-                    # Aqui você pode checar se o tempo acabou e agir conforme sua lógica
+
+                img_voltar_rect = desenhar_tela_jogo(
+                    screen, fontes, textos, CORES,
+                    forca_game,
+                    img_jogador, img_pontos, img_relogio, img_vidas, img_voltar
+                )
+                mouse_pos = pygame.mouse.get_pos()
+                if img_voltar_rect and img_voltar_rect.collidepoint(mouse_pos):
+                    pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                else:
+                    pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+                # AVANÇA PARA A PRÓXIMA QUESTÃO SE NECESSÁRIO
+                if forca_game.avancar_proxima:
+                    pygame.time.delay(1000)  # Pequena pausa para feedback visual
+                    forca_game.proxima_pergunta()
+                    forca_game.avancar_proxima = False
 
                 # --- DETECTA CLIQUE NAS LETRAS ---
                 if event.type == pygame.MOUSEBUTTONDOWN:

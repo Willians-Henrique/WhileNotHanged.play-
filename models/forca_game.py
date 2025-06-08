@@ -13,6 +13,8 @@ class ForcaGame:
         self.tempo_restante = 120
         self.estado_jogo = 0
         self.erros_rodada = 0
+        self.dica_timer = 0
+        self.avancar_proxima = False
         self.feedback = ""
         self.dica_mostrada = False
         self.letras_disponiveis = [chr(i) for i in range(65, 91)]
@@ -47,16 +49,19 @@ class ForcaGame:
                 self.jogador.adicionar_pontuacao()
                 self.dica_mostrada = False
                 self.jogador.registrar_acerto()
+                self.avancar_proxima = True  # Sinaliza para avançar
             return True
         else:
             self.feedback = "errado"
             self.jogador.adicionar_letra(letra)
-            self.erros_rodada += 1  # Soma erro da rodada
+            self.erros_rodada += 1
             self.jogador.registrar_erro()
-            # Se enforcou (6 erros), perde uma vida e reseta erros da rodada
+            if self.erros_rodada == 2:
+                self.dica_timer = 3
             if self.erros_rodada >= 6:
                 self.jogador.remover_vida()
                 self.erros_rodada = 0
+                self.avancar_proxima = True  # Avança para a próxima pergunta
             return False
 
     def reiniciar(self):
@@ -77,6 +82,9 @@ class ForcaGame:
         else:
             self.jogador.remover_vida()
             self.feedback = "Tempo esgotado!"
+        # Atualiza o timer da dica
+        if self.dica_timer > 0:
+            self.dica_timer -= 1
 
     def get_pergunta_atual(self):
         if 0 <= self.pergunta_atual < len(self.perguntas):
@@ -91,12 +99,13 @@ class ForcaGame:
         return ""
 
     def get_dica_atual(self, indice=0):
-        pergunta = self.get_pergunta_atual()
-        if pergunta and hasattr(pergunta, "dicas"):
-            if isinstance(pergunta.dicas, list) and len(pergunta.dicas) > indice:
-                return pergunta.dicas[indice]
-            elif isinstance(pergunta.dicas, str):
-                return pergunta.dicas
+        if self.dica_timer > 0:
+            pergunta = self.get_pergunta_atual()
+            if pergunta and hasattr(pergunta, "dicas"):
+                if isinstance(pergunta.dicas, list) and len(pergunta.dicas) > indice:
+                    return pergunta.dicas[indice]
+                elif isinstance(pergunta.dicas, str):
+                    return pergunta.dicas
         return ""
 
     def get_num_perguntas(self):
