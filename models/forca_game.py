@@ -92,11 +92,17 @@ class ForcaGame:
         else:
             self.jogador.remover_vida()
             self.feedback = "Tempo esgotado!"
-        # Atualiza o timer da dica
+            self.erros_rodada = 0
+            self.dica_timer1 = 0
+            self.dica_timer2 = 0
+            self.avancar_proxima = True  # Sinaliza para o controller avançar de questão
+
         if self.dica_timer1 > 0:
             self.dica_timer1 -= 1
         if self.dica_timer2 > 0:
             self.dica_timer2 -= 1
+
+
     def get_pergunta_atual(self):
         if 0 <= self.pergunta_atual < len(self.perguntas):
             return self.perguntas[self.pergunta_atual]

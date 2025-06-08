@@ -81,7 +81,12 @@ def iniciar_jogo():
                 agora = pygame.time.get_ticks()
                 if agora - ultimo_tick >= 1000:
                     ultimo_tick = agora
-                    forca_game.atualizar_tempo()
+                    # Só atualiza o tempo se ainda tem vidas
+                    if forca_game.jogador.vidas > 0:
+                        forca_game.atualizar_tempo()
+                    else:
+                        estado = "derrota"
+                        continue
 
                 img_voltar_rect = desenhar_tela_jogo(
                     screen, fontes, textos, CORES,
@@ -99,6 +104,10 @@ def iniciar_jogo():
                     pygame.time.delay(1000)  # Pequena pausa para feedback visual
                     forca_game.proxima_pergunta()
                     forca_game.avancar_proxima = False
+
+                    # Se acabou as vidas, encerra o jogo
+                    if forca_game.jogador.vidas <= 0:
+                        estado = "derrota"
 
                 # --- DETECTA CLIQUE NAS LETRAS ---
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -166,8 +175,11 @@ def iniciar_jogo():
             agora = pygame.time.get_ticks()
             if agora - ultimo_tick >= 1000:
                 ultimo_tick = agora
-                forca_game.atualizar_tempo()
-                # Aqui você pode checar se o tempo acabou e agir conforme sua lógica
+                if forca_game.jogador.vidas > 0:
+                    forca_game.atualizar_tempo()
+                else:
+                    estado = "derrota"
+                    continue
 
             img_voltar_rect = desenhar_tela_jogo(
                 screen, fontes, textos, CORES,
@@ -179,6 +191,8 @@ def iniciar_jogo():
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             else:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+        elif estado == "derrota":
+            pass
 
         pygame.display.flip()
         clock.tick(60)
