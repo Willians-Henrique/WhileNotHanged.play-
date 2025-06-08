@@ -5,15 +5,19 @@ class ForcaGame:
     def __init__(self, perguntas):
         self.jogador = None  # Instância de Jogador
         self.perguntas = [
-                    Pergunta(p["pergunta"], p["resposta"], p["dicas"][0] if "dicas" in p and p["dicas"] else "")
-                    if isinstance(p, dict) else p
-                    for p in perguntas
+            Pergunta(
+                p["pergunta"],
+                p["resposta"],
+                p["dicas"] if "dicas" in p and p["dicas"] else []
+            ) if isinstance(p, dict) else p
+            for p in perguntas
                 ]
         self.pergunta_atual = 0
         self.tempo_restante = 120
         self.estado_jogo = 0
         self.erros_rodada = 0
-        self.dica_timer = 0
+        self.dica_timer1 = 0
+        self.dica_timer2 = 0
         self.avancar_proxima = False
         self.feedback = ""
         self.dica_mostrada = False
@@ -38,6 +42,8 @@ class ForcaGame:
         self.dica_mostrada = False
         self.jogador.letras_adivinhadas = []
         self.erros_rodada = 0
+        self.dica_timer1 = 0
+        self.dica_timer2 = 0
 
     def verificar_letra(self, letra):
         pergunta = self.perguntas[self.pergunta_atual]
@@ -57,7 +63,9 @@ class ForcaGame:
             self.erros_rodada += 1
             self.jogador.registrar_erro()
             if self.erros_rodada == 2:
-                self.dica_timer = 3
+                self.dica_timer1 = 5
+            if self.erros_rodada == 4:
+                self.dica_timer2 = 5
             if self.erros_rodada >= 6:
                 self.jogador.remover_vida()
                 self.erros_rodada = 0
@@ -75,6 +83,8 @@ class ForcaGame:
         self.letras_rect = []
         self.mostrar_creditos = False
         self.erros_rodada = 0
+        self.dica_timer1 = 0
+        self.dica_timer2 = 0
 
     def atualizar_tempo(self):
         if self.tempo_restante > 0:
@@ -83,9 +93,10 @@ class ForcaGame:
             self.jogador.remover_vida()
             self.feedback = "Tempo esgotado!"
         # Atualiza o timer da dica
-        if self.dica_timer > 0:
-            self.dica_timer -= 1
-
+        if self.dica_timer1 > 0:
+            self.dica_timer1 -= 1
+        if self.dica_timer2 > 0:
+            self.dica_timer2 -= 1
     def get_pergunta_atual(self):
         if 0 <= self.pergunta_atual < len(self.perguntas):
             return self.perguntas[self.pergunta_atual]
@@ -98,14 +109,16 @@ class ForcaGame:
             return pergunta.resposta.upper()
         return ""
 
-    def get_dica_atual(self, indice=0):
-        if self.dica_timer > 0:
-            pergunta = self.get_pergunta_atual()
-            if pergunta and hasattr(pergunta, "dicas"):
-                if isinstance(pergunta.dicas, list) and len(pergunta.dicas) > indice:
-                    return pergunta.dicas[indice]
-                elif isinstance(pergunta.dicas, str):
-                    return pergunta.dicas
+    def get_dica_atual(self):
+        pergunta = self.get_pergunta_atual()
+        if not pergunta or not hasattr(pergunta, "dicas"):
+            return ""
+        # Segunda dica tem prioridade se timer ativo
+        if self.dica_timer2 > 0 and len(pergunta.dicas) > 1:
+            return pergunta.dicas[1]
+        # Primeira dica
+        if self.dica_timer1 > 0 and len(pergunta.dicas) > 0:
+            return pergunta.dicas[0]
         return ""
 
     def get_num_perguntas(self):

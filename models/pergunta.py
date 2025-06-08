@@ -1,8 +1,11 @@
 class Pergunta:
-    def __init__(self, pergunta, resposta, dica):
+    def __init__(self, pergunta, resposta, dicas):
         self.pergunta = pergunta
         self.resposta = resposta
-        self.dica = dica
+        if isinstance(dicas, list):
+            self.dicas = dicas
+        else:
+            self.dicas = [dicas]
 
     def verificar_resposta(self, letra, letras_adivinhadas):
         """Verifica se a letra está na resposta e ainda não foi adivinhada."""
