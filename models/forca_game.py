@@ -40,7 +40,7 @@ class ForcaGame:
         self.tempo_restante = 120
         self.feedback = ""
         self.dica_mostrada = False
-        self.jogador.letras_adivinhadas = []
+        self.jogador.letras_adivinhadas = {}
         self.erros_rodada = 0
         self.dica_timer1 = 0
         self.dica_timer2 = 0
@@ -48,18 +48,20 @@ class ForcaGame:
     def verificar_letra(self, letra):
         pergunta = self.perguntas[self.pergunta_atual]
         letra = letra.upper()
-        if pergunta.verificar_resposta(letra, self.jogador.letras_adivinhadas):
-            self.jogador.adicionar_letra(letra)
+        letra_correta = pergunta.verificar_resposta(letra, self.jogador.letras_adivinhadas)
+
+        self.jogador.letras_adivinhadas[letra] = letra_correta  # Armazena se acertou ou não
+
+        if letra_correta:
             if pergunta.palavra_completa(self.jogador.letras_adivinhadas):
                 self.feedback = "correto"
                 self.jogador.adicionar_pontuacao()
                 self.dica_mostrada = False
                 self.jogador.registrar_acerto()
-                self.avancar_proxima = True  # Sinaliza para avançar
+                self.avancar_proxima = True
             return True
         else:
             self.feedback = "errado"
-            self.jogador.adicionar_letra(letra)
             self.erros_rodada += 1
             self.jogador.registrar_erro()
             if self.erros_rodada == 2:
@@ -69,7 +71,7 @@ class ForcaGame:
             if self.erros_rodada >= 6:
                 self.jogador.remover_vida()
                 self.erros_rodada = 0
-                self.avancar_proxima = True  # Avança para a próxima pergunta
+                self.avancar_proxima = True
             return False
 
     def reiniciar(self):

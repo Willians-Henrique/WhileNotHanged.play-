@@ -5,7 +5,7 @@ class Jogador:
         self.pontuacao = 0
         self.acertos_seguidos = 0
         self.erros_consecutivos = 0
-        self.letras_adivinhadas = []
+        self.letras_adivinhadas = {}
 
     def adicionar_letra(self, letra):
         self.letras_adivinhadas.append(letra)
@@ -21,7 +21,7 @@ class Jogador:
         self.pontuacao = 0
         self.acertos_seguidos = 0
         self.erros_consecutivos = 0
-        self.letras_adivinhadas = []
+        self.letras_adivinhadas = {}
 
     def registrar_acerto(self):
         self.acertos_seguidos += 1

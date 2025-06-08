@@ -49,8 +49,8 @@ def desenhar_tela_jogo(
     img_vidas_rect = img_vidas.get_rect()
     img_vidas_rect.topright = (LARGURA - 150, y_superior)
     tela.blit(img_vidas, img_vidas_rect)
-    vidas_texto = fonte_media.render(str(vidas), True, VERMELHO)
-    tela.blit(vidas_texto, (img_vidas_rect.left - 10 - vidas_texto.get_width(), y_superior + img_vidas_rect.height//2 - vidas_texto.get_height()//2))
+    vidas_texto = fonte_grande.render(str(vidas), True, VERMELHO)
+    tela.blit(vidas_texto, (img_vidas_rect.left + 130 - vidas_texto.get_width(), y_superior + img_vidas_rect.height//2 - vidas_texto.get_height()//2))
 
     # Relógio
     img_relogio_rect = img_relogio.get_rect()
@@ -58,22 +58,22 @@ def desenhar_tela_jogo(
     tela.blit(img_relogio, img_relogio_rect)
     minutos = tempo_restante // 60
     segundos = tempo_restante % 60
-    tempo_texto = fonte_media.render(f"{minutos:02d}:{segundos:02d}", True, VERDE)
-    tela.blit(tempo_texto, (img_relogio_rect.left - 10 - tempo_texto.get_width(), y_superior + img_relogio_rect.height//2 - tempo_texto.get_height()//2))
+    tempo_texto = fonte_grande.render(f"{minutos:02d}:{segundos:02d}", True, VERDE)
+    tela.blit(tempo_texto, (img_relogio_rect.left + 210 - tempo_texto.get_width(), y_superior + img_relogio_rect.height//2 - tempo_texto.get_height()//2))
 
     # Pontos
     img_pontos_rect = img_pontos.get_rect()
     img_pontos_rect.topright = (img_relogio_rect.left - espaco_horizontal, y_superior)
     tela.blit(img_pontos, img_pontos_rect)
-    pontos_texto = fonte_media.render(str(pontuacao), True, AMARELO)
-    tela.blit(pontos_texto, (img_pontos_rect.left - 10 - pontos_texto.get_width(), y_superior + img_pontos_rect.height//2 - pontos_texto.get_height()//2))
+    pontos_texto = fonte_grande.render(str(pontuacao), True, AMARELO)
+    tela.blit(pontos_texto, (img_pontos_rect.left + 150 - pontos_texto.get_width(), y_superior + img_pontos_rect.height//2 - pontos_texto.get_height()//2))
 
     # Jogador
     img_jogador_rect = img_jogador.get_rect()
-    img_jogador_rect.topright = (img_pontos_rect.left - espaco_horizontal, y_superior)
+    img_jogador_rect.topright = (img_pontos_rect.left - 300, y_superior)
     tela.blit(img_jogador, img_jogador_rect)
-    nome_texto = fonte_media.render(nome_jogador, True, BRANCO)
-    tela.blit(nome_texto, (img_jogador_rect.left - 10 - nome_texto.get_width(), y_superior + img_jogador_rect.height//2 - nome_texto.get_height()//2))
+    nome_texto = fonte_grande.render(nome_jogador, True, PRETO)
+    tela.blit(nome_texto, ( img_jogador_rect.right + 10, y_superior + img_jogador_rect.height // 2 - nome_texto.get_height() // 2))
 
     # Pergunta
     texto_pergunta = pergunta.pergunta if pergunta else ""
@@ -152,11 +152,20 @@ def desenhar_tela_jogo(
         coluna = i % letras_por_linha
         x = x_alfabeto_inicial + coluna * espacamento
         y = margem_top + linha * (altura_botao + 15)
-        pygame.draw.rect(tela, AMARELO, (x, y, largura_botao, altura_botao), border_radius=8)
-        letra_render = fonte_pequena.render(letra, True, PRETO)
-        x_letra = x + (largura_botao - letra_render.get_width()) // 2
-        y_letra = y + (altura_botao - letra_render.get_height()) // 2
-        tela.blit(letra_render, (x_letra, y_letra))
+        rect = pygame.Rect(x, y, largura_botao, altura_botao)
+
+        cor_botao = AMARELO
+
+        if letra in forca_game.jogador.letras_adivinhadas:
+            if forca_game.jogador.letras_adivinhadas[letra]:
+                cor_botao = VERDE
+            else:
+                cor_botao = VERMELHO
+
+        pygame.draw.rect(tela, cor_botao, rect, border_radius=8)
+        letra_texto = fonte_pequena.render(letra, True, PRETO)
+        letra_rect = letra_texto.get_rect(center=rect.center)
+        tela.blit(letra_texto, letra_rect)
 
     # Desenha a forca e o boneco conforme os erros
     erros = forca_game.erros_rodada
@@ -164,10 +173,10 @@ def desenhar_tela_jogo(
 
     # Mensagem de cuidado
     if dica:
-        pygame.draw.rect(tela, AMARELO, (x_ret, y_tracos + 70, 800, 80), 0, border_radius=15)
-        pygame.draw.rect(tela, PRETO, (x_ret, y_tracos + 70, 800, 80), 3, border_radius=15)
+        pygame.draw.rect(tela, AMARELO, (x_ret, y_tracos + 250, 800, 80), 0, border_radius=15)
+        pygame.draw.rect(tela, PRETO, (x_ret, y_tracos + 250, 800, 80), 3, border_radius=15)
         texto_dica = fonte_pequena.render(textos["dica"].format(dica), True, PRETO)
-        tela.blit(texto_dica, (x_ret + 20, y_tracos + 100))
+        tela.blit(texto_dica, (x_ret + 20, y_tracos + 275))
 
     # Dica se vidas <= 1
     if vidas <= 1 and dica:

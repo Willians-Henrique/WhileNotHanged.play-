@@ -21,7 +21,7 @@ def desenhar_forca(tela, erros, cores, forca_x=100, forca_y=150):
     corda_largura = 20
 
     base_x = forca_x
-    base_y = forca_y + 370  # ALTURA // 2 + 220, mas relativo ao forca_y
+    base_y = forca_y + 470  # ALTURA // 2 + 220, mas relativo ao forca_y
 
     pygame.draw.rect(tela, PRETO, (base_x, base_y, base_largura, base_altura))
     poste_x = base_x + base_largura // 2 - 10
