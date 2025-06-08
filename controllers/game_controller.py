@@ -11,9 +11,12 @@ from models.forca_game import ForcaGame
 
 def iniciar_jogo():
     pygame.init()
+    pygame.mixer.init()
+
     screen = pygame.display.set_mode((LARGURA, ALTURA))
     clock = pygame.time.Clock()
     fontes = get_fonts()
+
 
     # Imagens
     img_trofeu = pygame.image.load("assets/img/trofeu.png").convert_alpha()

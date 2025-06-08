@@ -1,3 +1,4 @@
+import pygame
 from models.jogador import Jogador
 from models.pergunta import Pergunta
 
@@ -24,6 +25,9 @@ class ForcaGame:
         self.letras_disponiveis = [chr(i) for i in range(65, 91)]
         self.letras_rect = []
         self.mostrar_creditos = False
+        #Sons
+        self.som_acerto = pygame.mixer.Sound("assets/sounds/som-acerto.wav")
+        self.som_enforcado = pygame.mixer.Sound("assets/sounds/som-derrota.wav")
 
     def iniciar(self, nome_jogador):
         self.jogador = Jogador(nome_jogador)
@@ -54,6 +58,7 @@ class ForcaGame:
 
         if letra_correta:
             if pergunta.palavra_completa(self.jogador.letras_adivinhadas):
+                self.som_acerto.play()
                 self.feedback = "correto"
                 self.jogador.adicionar_pontuacao()
                 self.dica_mostrada = False
@@ -69,6 +74,7 @@ class ForcaGame:
             if self.erros_rodada == 4:
                 self.dica_timer2 = 5
             if self.erros_rodada >= 6:
+                self.som_enforcado.play()
                 self.jogador.remover_vida()
                 self.erros_rodada = 0
                 self.avancar_proxima = True
