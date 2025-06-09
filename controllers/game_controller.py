@@ -54,10 +54,9 @@ def iniciar_jogo():
                         jogador.nome = jogador.nome.strip()
                         if jogador.nome:
                             forca_game.iniciar(jogador.nome)
-                            print(f"Nome do jogador: {jogador.nome}")
+
                     else:
                         atualizar_nome(jogador, event)
-                        print(f"Nome do jogador: {jogador.nome}")
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if caixa_texto.collidepoint(event.pos):
@@ -66,15 +65,15 @@ def iniciar_jogo():
                         input_ativo = False
 
                     if botao_inicio_rect and botao_inicio_rect.collidepoint(event.pos):
-                        print("Clicou no botão COMEÇAR")
+                        
                         if jogador.nome.strip():
                             forca_game.iniciar(jogador.nome)
                             estado = "jogo"
                     elif botao_creditos_rect and botao_creditos_rect.collidepoint(event.pos):
-                        print("Clicou no botão RANKING")
+                        
                         estado = "ranking"
                     elif botao_sair_rect and botao_sair_rect.collidepoint(event.pos):
-                        print("Clicou no botão SAIR")
+                        
                         running = False
 
             elif estado == "ranking":
